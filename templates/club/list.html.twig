@@ -1,0 +1,79 @@
+
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ClubController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+{% if formations is not null %}
+<div class="example-wrapper">
+<h1> List des formation </h1>
+
+<ul>
+{% for i in formations %}
+<li> {{ i.Titre|upper }} 
+{%  if i.nb_participants==0 %}
+<a href="{{ path('getname', {nom:i.Titre}) }}">
+<input type="submit" value="Participer"   />
+</a>
+{% endif %}
+ </li>
+{% endfor %}
+</ul>
+
+<h5> On a  : {{formations|length()}} formations disponibles</h5>
+</div>
+
+<div class="example-wrapper">
+<h1> List des formation Theorique </h1>
+
+<ul>
+{% for i in formations %}
+{% if "theorique" in i.Description %}
+<li> {{ i.Titre }} </li>
+{% endif %}
+{% endfor %}
+</ul>
+</div>
+
+
+<div class="example-wrapper">
+<h3> List des formation ayant le plus grand nombre de participants.  </h3>
+
+<ul>
+{%  set  maxV=0 %} 
+{% set partcip=0 %}
+{% for  f in formations %}
+{% set maxV=max(f.nb_participants , maxV) %}
+{% set partcip=partcip+f.nb_participants %}
+{% endfor %}
+{% for f in formations %}
+{% if f.nb_participants==maxV %}
+<li>  {{ f.Titre }} </li>
+{% endif %}
+{% endfor %}
+</ul>
+
+<h5> On a  : {{ partcip }} participants</h5>
+</div>
+
+{% if formations is not defined %}
+
+<p> le tableau n'existe pas </p> </br>
+
+{% endif %}
+
+
+{% if  formations is empty  %}
+
+<p> le tableau est vide </p>
+
+{% endif %}
+
+{% endif %}
+
+{% endblock %}
